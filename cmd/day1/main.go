@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/mathew/advent-of-code-2020/internal/converters"
 	"github.com/mathew/advent-of-code-2020/internal/files"
-	"github.com/pkg/errors"
 	"log"
 )
 
@@ -35,14 +34,14 @@ func checkAddition(arr []int, num, answer int) (int, bool) {
 	return 0, false
 }
 
-func findSumCombination(numbers []int, answer int) (int, int, error) {
+func findSumCombination(numbers []int, answer int) (int, int, bool) {
 	for i, num := range numbers {
 		if match, ok := checkAddition(numbers[i+1:], num, answer); ok {
-			return num, match, nil
+			return num, match, true
 		}
 	}
 
-	return 0, 0, errors.New("No match found.")
+	return 0, 0, false
 }
 
 func findComponentSumCombination(numbers []int, answer, numComponents int, path []int) ([]int, bool) {
@@ -86,17 +85,19 @@ func main() {
 	}
 
 	// Part 1.
-	x, y, err := findSumCombination(ints, 2020)
-	if err != nil {
-		return
+	x, y, ok := findSumCombination(ints, 2020)
+	log.Print("Part One: ")
+	if !ok {
+		log.Print("Cannot find matching combination.")
+	} else {
+		log.Printf("%d + %d = %d \n", x, y, x*y)
 	}
-	log.Printf("Part One:\n%d + %d = %d \n", x, y, x*y)
 
 	// Part 2.
 	components, ok := findComponentSumCombination(ints, 2020, 3, nil)
 	log.Print("Part Two: ")
 	if !ok {
-		log.Printf("not found")
+		log.Print("Cannot find matching combination.")
 	} else {
 		log.Printf("%v multiplied together = %v", components, multiply(components...))
 	}
