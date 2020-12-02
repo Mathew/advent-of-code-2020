@@ -64,6 +64,21 @@ func singleLetterValidator(p Password) bool {
 	return letterCount >= p.min && letterCount <= p.max
 }
 
+func letterPositionValidator(p Password) bool {
+	isLetterOne := string(p.password[p.min - 1]) == p.letter
+	isLetterTwo := string(p.password[p.max - 1]) == p.letter
+
+	if isLetterOne && isLetterTwo {
+		return false
+	}
+
+	if isLetterOne || isLetterTwo {
+		return true
+	}
+
+	return false
+}
+
 func main() {
 	var err error
 	defer func() {
@@ -81,6 +96,13 @@ func main() {
 	if err != nil {
 		return
 	}
+	log.Print("Part One:")
+	log.Printf("Valid password count: %d", count)
 
+	count, err = CountValidPasswords(rawInput, letterPositionValidator)
+	if err != nil {
+		return
+	}
+	log.Print("Part Two:")
 	log.Printf("Valid password count: %d", count)
 }
