@@ -68,15 +68,7 @@ func letterPositionValidator(p Password) bool {
 	isLetterOne := string(p.password[p.min - 1]) == p.letter
 	isLetterTwo := string(p.password[p.max - 1]) == p.letter
 
-	if isLetterOne && isLetterTwo {
-		return false
-	}
-
-	if isLetterOne || isLetterTwo {
-		return true
-	}
-
-	return false
+	return !(isLetterOne && isLetterTwo) && (isLetterOne || isLetterTwo)
 }
 
 func main() {
